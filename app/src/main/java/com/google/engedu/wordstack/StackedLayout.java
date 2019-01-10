@@ -16,6 +16,7 @@
 package com.google.engedu.wordstack;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -24,29 +25,46 @@ import java.util.Stack;
 public class StackedLayout extends LinearLayout {
 
     private Stack<View> tiles = new Stack();
+    private static final String TAG = "StackedLayout";
 
     public StackedLayout(Context context) {
         super(context);
     }
 
     public void push(View tile) {
-        /**
-         * call removeView with the tile on top of the stack (if there is one) to hide that tile
-         * push the specified tile onto the tiles stack
-         * call addView with the tile that was just pushed
-         */
 
+        Log.i(TAG, "error test");
+
+        //call removeView with the tile on top of the stack (if there is one) to hide that tile
+        if (!tiles.empty()) {
+            removeView(tiles.peek());
+        }
+
+        // push specified tile into stack
+        tiles.push(tile);
+
+        // call add view with the tile that has just been pushed
+        addView(tiles.peek());
+
+        Log.i(TAG, "end of push error test");
 
     }
 
     public View pop() {
         View popped = null;
-        /**
-         **pop a tile from tiles
-         * call removeView with it
-         * call addView with the tile that is now on top of the stack
-         * return the popped tile
-         **/
+
+        // pop tile from tiles
+        popped = tiles.pop();
+
+        // remove view of popped
+        if (popped != null) {
+
+            removeView(popped);
+
+            // add view of new top tile
+            addView(tiles.peek());
+        }
+
         return popped;
     }
 
