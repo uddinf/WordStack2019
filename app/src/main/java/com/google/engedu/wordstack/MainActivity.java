@@ -71,16 +71,16 @@ public class MainActivity extends AppCompatActivity {
             Toast toast = Toast.makeText(this, "Could not load dictionary", Toast.LENGTH_LONG);
             toast.show();
         }
-        LinearLayout verticalLayout = (LinearLayout) findViewById(R.id.vertical_layout);
+        LinearLayout verticalLayout = findViewById(R.id.vertical_layout);
         stackedLayout = new StackedLayout(this);
         verticalLayout.addView(stackedLayout, 3);
 
         word1LinearLayout = findViewById(R.id.word1);
-        word1LinearLayout.setOnTouchListener(new TouchListener());
-        //word1LinearLayout.setOnDragListener(new DragListener());
+        //word1LinearLayout.setOnTouchListener(new TouchListener());
+        word1LinearLayout.setOnDragListener(new DragListener());
         word2LinearLayout = findViewById(R.id.word2);
-        word2LinearLayout.setOnTouchListener(new TouchListener());
-        //word2LinearLayout.setOnDragListener(new DragListener());
+        //word2LinearLayout.setOnTouchListener(new TouchListener());
+        word2LinearLayout.setOnDragListener(new DragListener());
     }
 
     private class TouchListener implements View.OnTouchListener {
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 LetterTile tile = (LetterTile) stackedLayout.peek();
                 tile.moveToViewGroup((ViewGroup) v);
                 if (stackedLayout.empty()) {
-                    TextView messageBox = (TextView) findViewById(R.id.message_box);
+                    TextView messageBox = findViewById(R.id.message_box);
                     messageBox.setText(word1 + " " + word2);
                 }
 
@@ -131,14 +131,14 @@ public class MainActivity extends AppCompatActivity {
                     LetterTile tile = (LetterTile) event.getLocalState();
                     tile.moveToViewGroup((ViewGroup) v);
                     if (stackedLayout.empty()) {
-                        TextView messageBox = (TextView) findViewById(R.id.message_box);
+                        TextView messageBox = findViewById(R.id.message_box);
                         messageBox.setText(word1 + " " + word2);
                     }
-                    /**
-                     **
-                     **  YOUR CODE GOES HERE
-                     **
-                     **/
+
+
+                    // push the dragged tile onto placedTiles
+                    placedTiles.push(tile);
+
                     return true;
             }
             return false;
@@ -147,7 +147,12 @@ public class MainActivity extends AppCompatActivity {
 
     public boolean onStartGame(View view) {
 
-        TextView messageBox = (TextView) findViewById(R.id.message_box);
+        word1LinearLayout.removeAllViews();
+        word2LinearLayout.removeAllViews();
+
+        stackedLayout.clear();
+
+        TextView messageBox = findViewById(R.id.message_box);
         messageBox.setText("Game started");
 
         // randomly choose 2 words
@@ -198,12 +203,6 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "word2: " + word2);
         Log.i(TAG, "word " + scrambledLetters + " " + word1 + " " + word2);
 
-        //removeAllViews(word1LinearLayout);
-        word1LinearLayout.removeAllViews();
-        word2LinearLayout.removeAllViews();
-
-        stackedLayout.clear();
-
         return true;
     }
 
@@ -215,7 +214,6 @@ public class MainActivity extends AppCompatActivity {
             LetterTile currTile = placedTiles.pop();
             currTile.moveToViewGroup(stackedLayout);
         }
-
 
         return true;
     }

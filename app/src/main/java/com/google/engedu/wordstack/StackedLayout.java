@@ -79,10 +79,9 @@ public class StackedLayout extends LinearLayout {
     }
 
     public void clear() {
-        /**
-         **
-         **  YOUR CODE GOES HERE
-         **
-         **/
+
+        // create a new stack to clear
+
+        tiles = new Stack();
     }
 }

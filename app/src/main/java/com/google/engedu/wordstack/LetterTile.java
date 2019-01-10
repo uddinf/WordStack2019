@@ -44,9 +44,10 @@ public class LetterTile extends TextView {
 
     public void moveToViewGroup(ViewGroup targetView) {
         ViewParent parent = getParent();
-        if (parent instanceof StackedLayout ) {
+        if (parent instanceof StackedLayout) {
             StackedLayout owner = (StackedLayout) parent;
             owner.pop();
+
             targetView.addView(this);
             freeze();
             setVisibility(View.VISIBLE);
@@ -68,11 +69,17 @@ public class LetterTile extends TextView {
 
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
-        /**
-         **
-         **  YOUR CODE GOES HERE
-         **
-         **/
-        return super.onTouchEvent(motionEvent);
+
+        // check whether the tile is frozen and the user started touching the View
+        if (!frozen && motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+            // call start drag
+            this.startDrag(ClipData.newPlainText("", ""), new View.DragShadowBuilder(this), this, 0);
+            return true;
+
+        } else {
+
+            return super.onTouchEvent(motionEvent);
+        }
+
     }
 }
